@@ -1,0 +1,25 @@
+header {
+  background: -webkit-linear-gradient(90deg, #2E6AA3 10%, #5CA7F0 90%);
+  background: -moz-linear-gradient(90deg, #2E6AA3 10%, #5CA7F0 90%);
+  background: -ms-linear-gradient(90deg, #2E6AA3 10%, #5CA7F0 90%);
+  background: -o-linear-gradient(90deg, #2E6AA3 10%, #5CA7F0 90%);
+  background: linear-gradient(90deg, #2E6AA3 10%, #5CA7F0 90%);
+  height: 60px;
+  color: white;
+  border-bottom: 0.3rem solid #2E6AA3;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Quaver Sans', sans-serif;
+}
+
+.third {
+  box-sizing: border-box;
+  flex-grow: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}

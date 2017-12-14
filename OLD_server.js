@@ -1,4 +1,3 @@
-
 'use strict';
 
 var mongo = require('mongodb');
