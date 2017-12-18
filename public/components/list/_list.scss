@@ -1,0 +1,47 @@
+.list-container {
+  max-height: calc(100vh - 65px);
+  width: 480px;
+  background-color: transparent;
+  position: absolute;
+  top: 65px;
+  left: 0;
+  z-index: 30;
+  -ms-overflow-y: auto;
+  overflow-y: auto;
+
+  transition: left 0.3s initial;
+  transition-property: left;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+  transition-delay: initial;
+
+
+
+  article {
+    display: block;
+    width: 100%;
+    height: 120px; // TODO: REMOVE LATER
+    transition: background-color 0.3s initial;
+    transition-property: background-color;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    transition-delay: initial;
+
+    &:nth-of-type(odd) {
+      background-color: rgba(46, 106, 163, .9);
+      &:hover {
+        background-color: rgba(46, 106, 163, 1);
+      }
+    }
+    &:nth-of-type(even) {
+      background-color: rgba(92, 167, 240, .9);
+      &:hover {
+        background-color: rgba(92, 167, 240, 1);;
+      }
+    }
+  }
+}
+
+.list-hidden {
+  left: -480px;
+}

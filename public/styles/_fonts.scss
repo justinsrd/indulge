@@ -40,3 +40,41 @@
   font-weight: normal;
   font-style: normal;
 }
+
+[class^="logo-"], [class*=" logo-"] {
+  font-family: 'icomoon';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.logo-location:before {
+  content: "\e948";
+}
+.logo-menu:before {
+  content: "\e9bd";
+}
+.logo-info:before {
+  content: "\ea0c";
+}
+.logo-cross:before {
+  content: "\ea0f";
+}
+.logo-twitter:before {
+  content: "\ea91";
+}
+.logo-github:before {
+  content: "\eab4";
+}
+
+
+
+$primary-font: "Quaver Sans", sans-serif;
+$secondary-font: "Montserrat", sans-serif;

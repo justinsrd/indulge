@@ -1,8 +1,30 @@
 @import '_reset';
 @import '_fonts';
-@import '_navbar';
-@import '_map';
+@import '../components/navbar/navbar';
+@import '../components/map/map';
+@import '../components/flag/flag';
+@import '../components/logo/logo';
+@import '../components/list/list';
 
 
-//$fa-font-path: "~font-awesome/fonts";
-//@import '../../node_modules/font-awesome/scss/font-awesome';
+$fa-font-path: "~font-awesome/fonts";
+@import '../../node_modules/font-awesome/scss/font-awesome';
+
+
+.clearfix::after {
+  content: '';
+  clear: both;
+  display: table;
+}
+
+.hover-color {
+  transition: color 0.3s ease;
+  transition-property: color;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+  transition-delay: initial;
+
+  &:hover {
+    color: #FF8F8B;
+  }
+}

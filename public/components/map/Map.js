@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import MapConfig from './MapConfig';
+import MapConfig from '../config/MapConfig';
 
 class Map extends Component {
 	constructor(props) {

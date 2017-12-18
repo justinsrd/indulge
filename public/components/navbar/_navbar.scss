@@ -21,5 +21,27 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 2.5rem;
+  position: relative;
+  padding-top: 10px;
 
+  .menu-icon-wrapper {
+    position: absolute;
+    left: 1rem;
+    text-decoration: none;
+    color: #FFFFFF;
+    font-size: 2rem;
+  }
+}
+
+.menu {
+  text-align: left;
+}
+
+.title {
+  text-align: center;
+}
+
+.about {
+  text-align: right;
 }
