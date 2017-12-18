@@ -26,17 +26,31 @@ class Map extends Component {
 	}
 
 	initMap() {
+		let activeInfoWindow = undefined;
+
 		const map = new google.maps.Map(document.getElementById('map'), {
-			zoom: 3,
-			center: {lat: -28.024, lng: 140.887},
+			zoom: 14,
+			center: {lat: 47.620883, lng: -122.331948},
 			styles : MapConfig.styles
 		});
 
 		const markers = MapConfig.locations.map(function(location) {
-			return new google.maps.Marker({
+			const marker = new google.maps.Marker({
 				position: location,
-				label: String.fromCharCode(Math.floor(Math.random() * (91 - 65 + 1) + 65))
+				tweetText: location.nombre,
+				icon: '../../lib/marker.png'
 			});
+
+			marker.addListener('click', function() {
+				if (activeInfoWindow) {
+					activeInfoWindow.close();
+				}
+				activeInfoWindow = new google.maps.InfoWindow({
+					content: marker.tweetText
+				});
+				activeInfoWindow.open(map, marker);
+			});
+			return marker;
 		});
 
 		// Add a marker clusterer to manage the markers.

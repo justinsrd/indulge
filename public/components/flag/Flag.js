@@ -11,7 +11,6 @@ class Flag extends Component {
 		return (
 			<div className="flag-container">
 				{/*<span className="logo-location"/>*/}
-				{/*<span className="logo-cross"/>*/}
 				{/*<span className="logo-twitter"/>*/}
 				<div className="links-container clearfix">
 					<Link to="#" style={{'float':'left'}} className="link-icon">
