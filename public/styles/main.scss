@@ -18,6 +18,7 @@ $fa-font-path: "~font-awesome/fonts";
 }
 
 .hover-color {
+  cursor: pointer;
   transition: color 0.3s ease;
   transition-property: color;
   transition-duration: 0.3s;

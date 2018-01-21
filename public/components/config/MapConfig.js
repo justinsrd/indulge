@@ -109,7 +109,6 @@ export default {
 		{lat: 47.672663, lng: -122.313194, nombre: 'hotel'},
 		{lat: 47.647104, lng: -122.318859, nombre: 'houses'},
 		{lat: 47.638545, lng: -122.334480, nombre: 'pike market'},
-		{lat: 47.634959, lng: -122.361259, nombre: 'stadium'},
-		{lat: 47.626515, lng: -122.334995, nombre: 'gym'}
+		{lat: 47.634959, lng: -122.361259, nombre: 'stadium'}
 	]
 }
