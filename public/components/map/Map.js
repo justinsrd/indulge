@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import MapConfig from '../config/MapConfig';
 import MapUtilities from './MapUtilities';
 import io from 'socket.io-client';
@@ -12,35 +13,45 @@ const socket = io(serverUrl + currentLoc);
 class Map extends Component {
 	constructor(props) {
 		super(props);
-		this.map = undefined;
-		this.markers = undefined;
-		this.markerClusterer = undefined;
+        this.map = undefined;
+        this.markerClusterer = undefined;
         this.activeInfoWindow = undefined;
+        this.locationsLoaded = false;
+        this.mapsAccessLoaded = false;
+        this.locations = {};
+        this.markers = [];
 	}
 
 	componentWillMount() {
-		this.loadScriptAsync('https://maps.googleapis.com/maps/api/js?key=AIzaSyDZXiq8rbR9uT8piyQrTMN1eT7ZT-WZYv8&callback=init');
+		this.loadScriptAsync('https://maps.googleapis.com/maps/api/js?key=AIzaSyDZXiq8rbR9uT8piyQrTMN1eT7ZT-WZYv8&callback=tryMapsAccess');
+        axios.get('/locations').then(function(res) {
+            this.locationsLoaded = true;
+            this.locations = res.data;
+            if (this.mapsAccessLoaded === true) {
+                this.initMap();
+            }
+        }.bind(this), function(err) {
+            console.log('error loading locations', err);
+        });
 	}
 
 	componentDidMount() {
-	    // called by callback from async script load
-		window.init = function() {
-			this.initMap();
-		}.bind(this);
+	    window.tryMapsAccess = function() {
+	        this.mapsAccessLoaded = true;
+	        if (this.locationsLoaded === true) {
+	            this.initMap();
+            }
+        }.bind(this);
 	}
 
 	initMap() {
 	    const self = this;
 
         self.map = new google.maps.Map(document.getElementById('map'), {
-        	zoom: 10,
-        	center: {lat: 37.585757, lng: -122.021425}, // san francisco
+        	zoom: self.locations[currentLoc].mapZoom,
+            center: self.locations[currentLoc].mapCenter,
         	styles : MapConfig.styles
         });
-
-		self.markers = MapConfig.locations.map(function(location) {
-			return self.locationToMarker(location);
-		});
 
         self.markerClusterer = new MarkerClusterer(self.map, self.markers, {
             imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
@@ -73,16 +84,16 @@ class Map extends Component {
         }
     }
 
-
-
 	changeCenter(location) {
-	    //TODO:get from server
-	    if (location === 'sf') {
-            this.map.setCenter({lat: 37.585757, lng: -122.021425});
-            this.map.setZoom(10);
-        } else if (location === 'sea') {
-            this.map.setCenter({lat: 47.620883, lng: -122.331948});
-            this.map.setZoom(14);
+        if (this.locations.hasOwnProperty(location)) {
+            const markers = this.markerClusterer.getMarkers();
+            for (let i = markers.length - 1; i >= 0; i--) {
+                this.markerClusterer.removeMarker(markers[i]);
+            }
+
+            socket.emit('setLocation', location);
+            this.map.setCenter(this.locations[location].mapCenter);
+            this.map.setZoom(this.locations[location].mapZoom)
         }
     }
 

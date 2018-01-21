@@ -29,8 +29,15 @@ class IndulgeUtils {
         return true;
     }
 
-    matchCity() {
-
+    matchLocation(locations, coordinates) {
+        const lat = coordinates.lat;
+        const long = coordinates.long;
+        for (let key in locations) {
+            const location = locations[key];
+            if (lat > location.startLong && lat < location.endLong && long > location.startLat && long < location.endLat) {
+                return key;
+            }
+        }
     }
 
     getCoordinates(tweet) {
@@ -56,6 +63,20 @@ class IndulgeUtils {
                 long: undefined
             }
         }
+    }
+
+    createTweetToBeSaved(tweet, matchedCity, coordinates) {
+        return {
+            text: tweet.text,
+            uuid: tweet.id_str,
+            screenName: tweet.user.screen_name,
+            userId: tweet.id_str,
+            date: tweet.timestamp_ms,
+            userImg: tweet.profile_image_url_https,
+            city: matchedCity,
+            entities: tweet.entities,
+            coordinates: coordinates
+        };
     }
 }
 

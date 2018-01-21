@@ -11,7 +11,6 @@ const MongoClient = require('mongodb').MongoClient;
 const DB_URI = 'mongodb://localhost:27017';
 const DB_NAME = 'indulgedb';
 const TWEET_COLLECTION_NAME = 'tweets';
-const DEFAULT_LOCATION = 'SAN_FRANCISCO';
 
 const client = new Twitter({
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -39,41 +38,44 @@ client.stream('statuses/filter', {locations: Utils.getLocationString(locations)}
         io.on('connection', function(socket) {
             const queriedCity = socket.handshake.query.loc;
             console.log('\nA new user has connected with queried city:', socket.handshake.query.loc);
-            if (!cachedTweets[queriedCity] || !cachedTweets[queriedCity].length) {
-                collection.find({city: queriedCity}).sort({$natural: -1}).limit(150).toArray(function(err, result) {
-                    cachedTweets[queriedCity] = result;
+            getLocationData(queriedCity);
+
+            socket.on('setLocation', function(queriedCity) {
+                getLocationData(queriedCity);
+            });
+
+            function getLocationData(queriedCity) {
+                if (!cachedTweets[queriedCity] || !cachedTweets[queriedCity].length) {
+                    collection.find({city: queriedCity}).sort({$natural: -1}).limit(150).toArray(function(err, result) {
+                        cachedTweets[queriedCity] = result;
+                        setTimeout(function() {
+                            socket.emit('initLoad', result);
+                        }, 2000);
+                    });
+                } else {
                     setTimeout(function() {
-                        socket.emit('initLoad', result);
+                        socket.emit('initLoad', cachedTweets[queriedCity]);
                     }, 2000);
-                });
-            } else {
-                socket.emit('initLoad', cachedTweets);
+                }
             }
         });
 
-        stream.on('data', function(tweet) {
-            if (tweet.geo && Utils.doesNotContainBannedWords(tweet) && !tweet.possibly_sensitive) {
-                const matchedCity = Utils.matchCity(tweet.geo) || DEFAULT_LOCATION;
-                const geoTweet = {
-                    text: tweet.text,
-                    uuid: tweet.id_str,
-                    screenName: tweet.user.screen_name,
-                    userId: tweet.id_str,
-                    date: tweet.timestamp_ms,
-                    userImg: tweet.profile_image_url_https,
-                    city: matchedCity,
-                    entities: tweet.entities,
-                    coordinates: Utils.getCoordinates(tweet)
-                };
+        stream.on('data', function(tweetData) {
+            if (tweetData.geo && Utils.doesNotContainBannedWords(tweetData) && !tweetData.possibly_sensitive) {
+                const coordinates = Utils.getCoordinates(tweetData);
+                const matchedCity = Utils.matchLocation(locations, coordinates);
+                if (matchedCity) {
+                    const tweet = Utils.createTweetToBeSaved(tweetData, matchedCity, coordinates);
 
-                collection.insertOne(geoTweet, function(err, res) {
-                    console.log('\ntweet: ' + geoTweet.text);
-                    io.emit('newTweet', geoTweet);
-                    if (!cachedTweets[matchedCity] || cachedTweets[matchedCity].length > 200) {
-                        cachedTweets[matchedCity] = [];
-                    }
-                    cachedTweets[matchedCity].push(geoTweet);
-                });
+                    collection.insertOne(tweet, function(err, res) {
+                        console.log('\ntweet: ' + tweet.text + ' ' + '[' + matchedCity + ']');
+                        io.emit('newTweet', tweet);
+                        if (!cachedTweets[matchedCity] || cachedTweets[matchedCity].length > 200) {
+                            cachedTweets[matchedCity] = [];
+                        }
+                        cachedTweets[matchedCity].push(tweet);
+                    });
+                }
             }
         });
     });
