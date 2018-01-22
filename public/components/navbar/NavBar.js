@@ -19,7 +19,6 @@ class NavBar extends Component {
         axios.get('/locations').then(function(res) {
         	const locations = [];
 			for (let key in res.data) {
-				res.data[key].key = key;
 				locations.push(res.data[key]);
 			}
 			this.setState({locations: locations});
@@ -52,11 +51,13 @@ class NavBar extends Component {
 					<span style={{'fontStyle': 'italic', 'fontSize': '2.2rem'}}>Visualizing Tweets Around You</span>
 				</section>
 				<section className="third about">
-					<select onChange={this.changeSelectedMenuItem} value={this.state.currentLocation}>
-						{this.state.locations.map(function(location) {
-							return <option key={location.key} value={location.key}>{location.key}</option>;
-						})};
-					</select>
+                    <div className="dropdown-wrapper">
+						<select className="dropdown" onChange={this.changeSelectedMenuItem} value={this.state.currentLocation}>
+							{this.state.locations.map(function(location) {
+								return <option key={location.key} value={location.key}>{location.displayName}</option>;
+							})};
+						</select>
+					</div>
 				</section>
 			</header>
 		);

@@ -32,6 +32,15 @@ header {
     color: #FFFFFF;
     font-size: 2rem;
   }
+
+  .dropdown-wrapper {
+    position: absolute;
+    right: 1rem;
+
+    .dropdown {
+      vertical-align: middle;
+    }
+  }
 }
 
 .menu {

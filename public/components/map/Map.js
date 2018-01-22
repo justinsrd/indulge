@@ -51,6 +51,7 @@ class Map extends Component {
 
     tryToInitMap() {
         if (this.mapsAccessLoaded === true && this.selectedMapLocation && Object.keys(this.locations) && !this.mapLoaded) {
+            this.mapLoaded = true;
             this.initMap();
         }
     }
@@ -102,7 +103,8 @@ class Map extends Component {
             }
             socket.emit('setLocation', location);
             this.map.setCenter(this.locations[location].mapCenter);
-            this.map.setZoom(this.locations[location].mapZoom)
+            this.map.setZoom(this.locations[location].mapZoom);
+            localStorage.setItem('currentLocation', location);
         }
     }
 
@@ -130,7 +132,7 @@ class Map extends Component {
         marker.addListener('click', function() {
             if (self.activeInfoWindow) self.activeInfoWindow.close();
             let contentString = '<span>' + location.nombre + '</span>';
-            if (directImgUrl) contentString += '<a href="' + urlInfo.extendedUrl + '" target="_blank"><img class="centered-image" src="' + directImgUrl + '" width="180"/></a>';
+            if (directImgUrl) contentString += '<a href="' + urlInfo.extendedUrl + '" target="_blank"><img class="infowindow-image" src="' + directImgUrl + '" width="180"/></a>';
 
             self.activeInfoWindow = new google.maps.InfoWindow({
                 content: contentString,

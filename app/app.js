@@ -11,6 +11,8 @@ const MongoClient = require('mongodb').MongoClient;
 const DB_URI = 'mongodb://localhost:27017';
 const DB_NAME = 'indulgedb';
 const TWEET_COLLECTION_NAME = 'tweets';
+const TWEET_FETCH_LIMIT = 120;
+const RESET_CACHE_LIMIT = 150;
 
 const client = new Twitter({
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -41,18 +43,21 @@ client.stream('statuses/filter', {locations: Utils.getLocationString(locations)}
             getLocationData(queriedCity);
 
             socket.on('setLocation', function(queriedCity) {
+                console.log('getting for', queriedCity);
                 getLocationData(queriedCity);
             });
 
             function getLocationData(queriedCity) {
                 if (!cachedTweets[queriedCity] || !cachedTweets[queriedCity].length) {
-                    collection.find({city: queriedCity}).sort({$natural: -1}).limit(150).toArray(function(err, result) {
+                    collection.find({city: queriedCity}).sort({$natural: -1}).limit(TWEET_FETCH_LIMIT).toArray(function(err, result) {
+                        console.log('grabbing from db', result.length);
                         cachedTweets[queriedCity] = result;
                         setTimeout(function() {
                             socket.emit('initLoad', result);
                         }, 2000);
                     });
                 } else {
+                    console.log('grabbing from cache', cachedTweets[queriedCity].length);
                     setTimeout(function() {
                         socket.emit('initLoad', cachedTweets[queriedCity]);
                     }, 2000);
@@ -69,11 +74,13 @@ client.stream('statuses/filter', {locations: Utils.getLocationString(locations)}
                     collection.insertOne(tweet, function(err, res) {
                         console.log('\ntweet: ' + tweet.text + ' ' + '[' + matchedCity + ']');
                         io.emit('newTweet', tweet);
-                        if (!cachedTweets[matchedCity] || cachedTweets[matchedCity].length > 200) {
-                            collection.find({city: matchedCity}).sort({$natural: -1}).limit(150).toArray(function(err, result) {
+                        if (!cachedTweets[matchedCity] || cachedTweets[matchedCity].length > RESET_CACHE_LIMIT || !cachedTweets[matchedCity].length) {
+                            collection.find({city: matchedCity}).sort({$natural: -1}).limit(TWEET_FETCH_LIMIT).toArray(function(err, result) {
                                 cachedTweets[matchedCity] = result;
                                 cachedTweets[matchedCity].push(tweet);
                             });
+                        } else {
+                            cachedTweets[matchedCity].push(tweet);
                         }
                     });
                 }

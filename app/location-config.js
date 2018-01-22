@@ -1,5 +1,7 @@
 module.exports = {
     'SAN_FRANCISCO': {
+        key: 'SAN_FRANCISCO',
+        displayName: 'San Francisco',
         startLat: -122.54, // -122.531342
         startLong: 37.68, // 37.685326
         endLat: -122.36, // -122.355784
@@ -8,6 +10,8 @@ module.exports = {
         mapZoom: 12
     },
     'SEATTLE': {
+        key: 'SEATTLE',
+        displayName: 'Seattle',
         startLat: -122.61, // -122.613465
         startLong: 47.23, // 47.238920
         endLat: -122.10, // -122.098927
@@ -16,6 +20,8 @@ module.exports = {
         mapZoom: 14
     },
     'EAST_BAY': {
+        key: 'EAST_BAY',
+        displayName: 'East Bay',
         startLat: -121.97, // -121.969844
         startLong: 37.63, // 37.639467
         endLat: -121.76, // -121.753146
