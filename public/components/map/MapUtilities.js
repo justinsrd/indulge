@@ -23,7 +23,18 @@ class MapUtilities {
             xhr.onerror = () => reject(xhr.statusText);
             xhr.send(obj.body);
         });
-    };
+    }
+
+    getMediaUrl(urls) {
+        for (let i = 0; i < urls.length; i++) {
+            if (urls[i].expanded_url.indexOf('www.instagram') > -1) {
+                return {
+                    redirectUrl: urls[i].expanded_url + 'media/?s=t',
+                    extendedUrl: urls[i].expanded_url
+                };
+            }
+        }
+    }
 
     static serviceFactory() {
         return new MapUtilities();

@@ -27,7 +27,7 @@ app.get('/locations', function(req, res) {
 });
 
 client.stream('statuses/filter', {locations: Utils.getLocationString(locations)}, function(stream) {
-	console.log("Twitter stream has started...");
+	console.log('Twitter stream has started...');
 
     MongoClient.connect(DB_URI, function(err, client) {
         console.log('Successfully connected to database...');
@@ -66,14 +66,15 @@ client.stream('statuses/filter', {locations: Utils.getLocationString(locations)}
                 const matchedCity = Utils.matchLocation(locations, coordinates);
                 if (matchedCity) {
                     const tweet = Utils.createTweetToBeSaved(tweetData, matchedCity, coordinates);
-
                     collection.insertOne(tweet, function(err, res) {
                         console.log('\ntweet: ' + tweet.text + ' ' + '[' + matchedCity + ']');
                         io.emit('newTweet', tweet);
                         if (!cachedTweets[matchedCity] || cachedTweets[matchedCity].length > 200) {
-                            cachedTweets[matchedCity] = [];
+                            collection.find({city: matchedCity}).sort({$natural: -1}).limit(150).toArray(function(err, result) {
+                                cachedTweets[matchedCity] = result;
+                                cachedTweets[matchedCity].push(tweet);
+                            });
                         }
-                        cachedTweets[matchedCity].push(tweet);
                     });
                 }
             }
