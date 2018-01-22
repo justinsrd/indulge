@@ -77,10 +77,10 @@ client.stream('statuses/filter', {locations: Utils.getLocationString(locations)}
                         if (!cachedTweets[matchedCity] || cachedTweets[matchedCity].length > RESET_CACHE_LIMIT || !cachedTweets[matchedCity].length) {
                             collection.find({city: matchedCity}).sort({$natural: -1}).limit(TWEET_FETCH_LIMIT).toArray(function(err, result) {
                                 cachedTweets[matchedCity] = result;
-                                cachedTweets[matchedCity].push(tweet);
+                                cachedTweets[matchedCity].unshift(tweet);
                             });
                         } else {
-                            cachedTweets[matchedCity].push(tweet);
+                            cachedTweets[matchedCity].unshift(tweet);
                         }
                     });
                 }

@@ -33,7 +33,7 @@ class Home extends Component {
 		return (
 			<div>
 				<NavBar toggleHandler={this.toggleList} showList={this.state.showList} setNewLocation={this.setNewLocation} setAllLocations={this.setAllLocations}/>
-				<Map currentLocation={this.state.currentLocation} locations={this.state.locations}/>
+				<Map currentLocation={this.state.currentLocation} locations={this.state.locations} showList={this.state.showList}/>
 			</div>
 		);
 	}

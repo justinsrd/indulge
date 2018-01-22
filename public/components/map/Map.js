@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import List from '../list/List';
 import MapConfig from '../config/MapConfig';
 import MapUtilities from './MapUtilities';
 import io from 'socket.io-client';
@@ -19,6 +20,10 @@ class Map extends Component {
         this.selectedMapLocation = undefined;
         this.mapLoaded = false;
         this.locations = {};
+        this.state = {
+            tweets: []
+        };
+        this.findTweet = this.findTweet.bind(this);
 	}
 
 	componentWillMount() {
@@ -71,7 +76,7 @@ class Map extends Component {
 
         socket.on('initLoad', function(tweets) {
             for (let i = 0; i < tweets.length; i++) {
-                self.processNewTweet(tweets[i]);
+                self.processNewTweet(tweets[i], true);
             }
         });
 
@@ -80,18 +85,18 @@ class Map extends Component {
         });
 	}
 
-	processNewTweet(tweet) {
+	processNewTweet(tweet, isInitialLoad) {
 	    const self = this;
         if (tweet.entities && tweet.entities.urls && tweet.entities.urls.length && MapUtilities.getMediaUrl(tweet.entities.urls)) {
             const urlInfo = MapUtilities.getMediaUrl(tweet.entities.urls);
             MapUtilities.findRedirectUrl({url: urlInfo.redirectUrl}).then(function(res) {
-                self.renderNewTweet(tweet, urlInfo, res.responseURL);
+                self.renderNewTweet(tweet, isInitialLoad, urlInfo, res.responseURL);
             }, function(error) {
                 console.log('error getting redirect URL', error);
-                self.renderNewTweet(tweet);
+                self.renderNewTweet(tweet, isInitialLoad);
             });
         } else {
-            self.renderNewTweet(tweet);
+            self.renderNewTweet(tweet, isInitialLoad);
         }
     }
 
@@ -108,10 +113,19 @@ class Map extends Component {
         }
     }
 
-    renderNewTweet(tweet, urlInfo, directImgUrl) {
+    renderNewTweet(tweet, isInitialLoad, urlInfo, directImgUrl) {
         const newLoc = {lat: tweet.coordinates.lat, lng: tweet.coordinates.long, nombre: tweet.text};
         const newMarker = this.locationToMarker(newLoc, urlInfo, directImgUrl);
         this.markerClusterer.addMarker(newMarker);
+        if (isInitialLoad) {
+            this.setState(prevState => ({
+                tweets: [...prevState.tweets, tweet]
+            }));
+        } else {
+            this.setState(prevState => ({
+                tweets: [tweet, ...prevState.tweets]
+            }));
+        }
     }
 
     loadScriptAsync(src) {
@@ -143,9 +157,14 @@ class Map extends Component {
         return marker;
     }
 
+    findTweet(tweet, event) {
+        this.map.setCenter({lat: tweet.coordinates.lat, lng: tweet.coordinates.long});
+        this.map.setZoom(17);
+    }
+
 	render() {
 		return (
-			<span/>
+            <List showList={this.props.showList} tweets={this.state.tweets} findTweet={this.findTweet}/>
 		);
 	}
 }
