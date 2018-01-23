@@ -1,15 +1,5 @@
-# Logs
-logs
-*.log
-
-# Runtime data
-pids
-*.pid
-*.seed
-
-app/js/controllers/.DS_Store
+.idea
+dist
 node_modules
-config.js
-db/*
-dump/*
-
+yarn-error.log
+.env*

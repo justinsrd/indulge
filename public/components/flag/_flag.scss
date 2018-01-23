@@ -1,0 +1,38 @@
+.flag-container {
+  position: absolute;
+  z-index: 10;
+  background-color: #5CA7F0;
+  width: 150px;
+  top: -.3rem;
+  right: 2rem;
+  border: 0.3rem solid #2E6AA3;
+  padding-top: 1rem;
+
+  &:hover {
+    .logo-container {
+      margin-top: 1rem;
+    }
+  }
+}
+
+.links-container {
+  display: block;
+  width: 80px;
+  margin: 0 auto;
+
+  .link-icon {
+    font-size: 2rem;
+    color: #FFFFFF;
+    text-decoration: none;
+  }
+}
+
+.title-container {
+  margin-top: .5rem;
+  text-align: center;
+  width: 100%;
+
+  .title {
+
+  }
+}

@@ -1,39 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html>
+<head>
     <meta charset="utf-8">
-    <title>INDULGE</title>
-    <meta name="description" content="A way to visualize Twitter information">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/application.css">
-    <link rel="icon" type="image/png" href="images/favicon.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="images/homescreen-icon.png" />
-    <script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
-  </head>
-  <body data-ng-app="indulgeApp">
-    <header class="slideDown clearfix">
-      <section class="icon-menu"></section>
-      <ul class="clearfix">
-        <a href="https://github.com/eriksjaastad/indulge" target="_blank"><li class="icon-github4"></li></a>
-        <a href="#/about"><li class="icon-info"></li></a>
-      </ul>
-      <h1 class="logo">
-        <section class="icon-location2"></section>
-        <section class="logoText">Indulge</section>
-      </h1>
-      <h2>Visual Data Surrounding You</h2>
-    </header>
-    <!-- <div class="mask is-active"></div> -->
-    <main data-ng-controller="mapController">
-      <!-- <article class="welcome" data-about-directive></article> -->
-      <article class="tweetList" id="tweetList" data-tweets-directive></article>
-      <section id="map"></section>
-      <div data-ng-view></div>
-    </main>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-  <script src="markerclusterer.js"></script>
-  <script src="jquery.ui.map.js"></script>
-  <script src="js/bundle.js"></script>
-  </body>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <title>indulge2</title>
+</head>
+<body>
+    <div id="root"></div>
+    <div id="map"></div>
+
+    <script src="./lib/markerclusterer.js"></script>
+</body>
 </html>

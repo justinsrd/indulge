@@ -1,0 +1,15 @@
+.logo-container {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: .5rem;
+  transition: margin-top 0.3s initial;
+  transition-property: margin-top;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+  transition-delay: initial;
+}
+
+.header-logo {
+  font-size: 5rem;
+}
