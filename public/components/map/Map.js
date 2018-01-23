@@ -6,7 +6,6 @@ import MapUtilities from './MapUtilities';
 import io from 'socket.io-client';
 const MARKER_CLUSTERER_URL = 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m';
 const MAPS_API_URL = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDZXiq8rbR9uT8piyQrTMN1eT7ZT-WZYv8&callback=tryMapsAccess';
-const SERVER_URL = 'http://localhost:4444?loc=';
 let socket;
 
 
@@ -35,6 +34,7 @@ class Map extends Component {
 	}
 
     componentWillReceiveProps(props) {
+	    const self = this;
 	    if (props.locations) {
 	        this.locations = props.locations;
 	        this.tryToInitMap();
@@ -48,7 +48,7 @@ class Map extends Component {
                 this.selectedMapLocation = props.currentLocation.key;
             }
             if (!socket) {
-                socket = io(SERVER_URL + this.selectedMapLocation);
+                socket = io.connect({query: {loc: self.selectedMapLocation}});
             }
             this.tryToInitMap();
         }
