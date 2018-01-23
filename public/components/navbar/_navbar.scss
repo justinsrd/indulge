@@ -52,10 +52,18 @@ header {
 
 .title {
   text-align: center;
-  span {
-    font-style: italic;
-    font-size: 2.2rem;
+  a {
+    color: #FFF;
+    text-decoration: none;
+    span {
+      font-style: italic;
+      font-size: 2.2rem;
+    }
+    .logo {
+      margin-right: .2rem;
+    }
   }
+
 }
 
 .about {
@@ -70,8 +78,8 @@ header {
 
 .ReactModal__Overlay {
   background-color: rgba(0,0,0,.55) !important;
-  -webkit-animation: fadeIn 0.3s linear;
-  animation: fadeIn 0.3s linear;
+  -webkit-animation: fadeIn 0.3s linear !important;
+  animation: fadeIn 0.3s linear !important;
 
   .ReactModal__Content {
     border: none !important;

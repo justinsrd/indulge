@@ -61,7 +61,7 @@ class NavBar extends Component {
 					</div>
 				</section>
 				<section className="third title">
-					<span>Visualizing Tweets Around You</span>
+					<a href="/"><span className="logo logo-location"/><span>Indulge</span></a>
 				</section>
 				<section className="third about">
                     <div className="dropdown-wrapper">
