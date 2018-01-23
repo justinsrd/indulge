@@ -25,13 +25,33 @@ class MapUtilities {
         });
     }
 
-    getMediaUrl(urls) {
-        for (let i = 0; i < urls.length; i++) {
-            if (urls[i].expanded_url.indexOf('www.instagram') > -1) {
-                return {
-                    redirectUrl: urls[i].expanded_url + 'media/?s=t',
-                    extendedUrl: urls[i].expanded_url
-                };
+    getMediaUrl(tweet) {
+        if (tweet.entities && tweet.entities.urls && tweet.entities.urls.length) {
+            const urls = tweet.entities.urls;
+            for (let i = 0; i < urls.length; i++) {
+                if (urls[i].expanded_url.indexOf('www.instagram') > -1) {
+                    return {
+                        mediaSourceUrlRedirectUrl: urls[i].expanded_url + 'media/?s=t',
+                        linkUrl: urls[i].expanded_url
+                    };
+                }
+            }
+        }
+        if (tweet.entities && tweet.entities.media && tweet.entities.media.length) {
+            const urls = tweet.entities.media;
+            for (let i = 0; i < urls.length; i++) {
+                if (urls[i].media_url_https) {
+                    return {
+                        mediaSourceUrl: urls[i].media_url_https,
+                        linkUrl: urls[i].display_url || urls.expanded_url
+                    }
+                }
+                if (urls[i].media_url) {
+                    return {
+                        mediaSourceUrl: urls[i].media_url,
+                        linkUrl: urls[i].display_url || urls.expanded_url
+                    }
+                }
             }
         }
     }

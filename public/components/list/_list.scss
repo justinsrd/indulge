@@ -20,7 +20,6 @@
   article {
     display: block;
     width: 100%;
-    height: 120px; // TODO: REMOVE LATER
     color: #FFF;
     transition: background-color 0.3s initial;
     transition-property: background-color;
@@ -33,15 +32,36 @@
     }
 
     &:nth-of-type(odd) {
-      background-color: rgba(46, 106, 163, .9);
+      background-color: rgba(46, 106, 163, .95);
       &:hover {
         background-color: rgba(46, 106, 163, 1);
       }
     }
     &:nth-of-type(even) {
-      background-color: rgba(92, 167, 240, .9);
+      background-color: rgba(92, 167, 240, .95);
       &:hover {
         background-color: rgba(92, 167, 240, 1);;
+      }
+    }
+
+    .list-content-container {
+      padding: 1rem 1rem 1rem 1rem;
+      box-sizing: border-box;
+      display: block;
+      .list-text {
+        font-family: 'Montserrat', sans-serif;
+        line-height: 1.2;
+        font-size: 1rem;
+        display: block;
+        a {
+          color: #ab0000;
+        }
+      }
+
+      .list-date {
+        display: block;
+        font-size: .75rem;
+        margin-top: .7rem;
       }
     }
   }
@@ -49,4 +69,13 @@
 
 .list-hidden {
   left: -480px;
+}
+
+.gm-style-iw a {
+  color: #1473ca;
+}
+
+.gm-svpc,
+.gm-style-cc {
+  display: none !important;
 }

@@ -22,7 +22,10 @@ class List extends Component {
 				{this.props.tweets.map(function(tweet) {
 					return (
 						<article key={tweet._id} onClick={(evt) => self.props.findTweet(tweet, evt)}>
-							{tweet.text} - {self.formatTimeString(tweet)}
+							<div className="list-content-container">
+                                <span className="list-text" dangerouslySetInnerHTML={{__html: tweet.text}}/>
+                                <span className="list-date logo-twitter">{self.formatTimeString(tweet)}</span>
+							</div>
 						</article>
 					);
 				})}

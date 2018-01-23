@@ -27,6 +27,6 @@ module.exports = {
         endLat: -121.76, // -121.753146
         endLong: 37.81, // 37.808428
         mapCenter: {lat: 37.634683, lng: -121.962326},
-        mapZoom: 11
+        mapZoom: 12
     },
 };

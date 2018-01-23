@@ -81,22 +81,35 @@ class Map extends Component {
         });
 
         socket.on('newTweet', function(tweet) {
-            if (tweet.city === this.selectedMapLocation) {
+            if (tweet.city === self.selectedMapLocation) {
                 self.processNewTweet(tweet);
             }
         });
 	}
 
 	processNewTweet(tweet, isInitialLoad) {
-	    const self = this;
-        if (tweet.entities && tweet.entities.urls && tweet.entities.urls.length && MapUtilities.getMediaUrl(tweet.entities.urls)) {
-            const urlInfo = MapUtilities.getMediaUrl(tweet.entities.urls);
-            MapUtilities.findRedirectUrl({url: urlInfo.redirectUrl}).then(function(res) {
-                self.renderNewTweet(tweet, isInitialLoad, urlInfo, res.responseURL);
-            }, function(error) {
-                console.log('error getting redirect URL', error);
+        const self = this;
+        if (tweet.text.indexOf('https://') > -1) {
+            const text = tweet.text;
+            const linkIndex = tweet.text.indexOf('https://');
+            tweet.text = text.substr(0, linkIndex) + '<a href="' + text.substr(linkIndex) + '" target="_blank">' + text.substr(linkIndex) + '</a>';
+        }
+
+        const mediaInfo = MapUtilities.getMediaUrl(tweet);
+        if (mediaInfo) {
+            if (mediaInfo.mediaSourceUrlRedirectUrl) {
+                MapUtilities.findRedirectUrl({url: mediaInfo.mediaSourceUrlRedirectUrl}).then(function(res) {
+                    mediaInfo.mediaSourceUrl = res.responseURL;
+                    self.renderNewTweet(tweet, isInitialLoad, mediaInfo);
+                }, function(error) {
+                    console.log('error getting redirect URL', error);
+                    self.renderNewTweet(tweet, isInitialLoad);
+                });
+            } else if (mediaInfo.linkUrl) {
+                self.renderNewTweet(tweet, isInitialLoad, mediaInfo);
+            } else {
                 self.renderNewTweet(tweet, isInitialLoad);
-            });
+            }
         } else {
             self.renderNewTweet(tweet, isInitialLoad);
         }
@@ -104,10 +117,13 @@ class Map extends Component {
 
 	changeCenter(location) {
         if (this.locations.hasOwnProperty(location)) {
+            this.props.hideList();
             const markers = this.markerClusterer.getMarkers();
             for (let i = markers.length - 1; i >= 0; i--) {
                 this.markerClusterer.removeMarker(markers[i]);
             }
+            this.setState({showList: false});
+            this.setState({tweets: []});
             socket.emit('setLocation', location);
             this.map.setCenter(this.locations[location].mapCenter);
             this.map.setZoom(this.locations[location].mapZoom);
@@ -115,9 +131,9 @@ class Map extends Component {
         }
     }
 
-    renderNewTweet(tweet, isInitialLoad, urlInfo, directImgUrl) {
-        const newLoc = {lat: tweet.coordinates.lat, lng: tweet.coordinates.long, nombre: tweet.text};
-        const newMarker = this.locationToMarker(newLoc, urlInfo, directImgUrl);
+    renderNewTweet(tweet, isInitialLoad, mediaInfo) {
+        const tweetInfo = {lat: tweet.coordinates.lat, lng: tweet.coordinates.long, txt: tweet.text};
+        const newMarker = this.locationToMarker(tweetInfo, mediaInfo);
         this.markerClusterer.addMarker(newMarker);
         if (isInitialLoad) {
             this.setState(prevState => ({
@@ -138,7 +154,8 @@ class Map extends Component {
         document.getElementsByTagName('body')[0].appendChild(tag);
     }
 
-    locationToMarker(location, urlInfo, directImgUrl) {
+    locationToMarker(location, mediaInfo) {
+	    const directImgUrl = mediaInfo ? mediaInfo.mediaSourceUrl : undefined;
         const self = this;
         const marker = new google.maps.Marker({
             position: location,
@@ -147,14 +164,14 @@ class Map extends Component {
 
         marker.addListener('click', function() {
             if (self.activeInfoWindow) self.activeInfoWindow.close();
-            let contentString = '<span>' + location.nombre + '</span>';
-            if (directImgUrl) contentString += '<a href="' + urlInfo.extendedUrl + '" target="_blank"><img class="infowindow-image" src="' + directImgUrl + '" width="180"/></a>';
+            let contentString = '<span>' + location.txt + '</span>';
+            if (directImgUrl) contentString += '<a href="' + mediaInfo.linkUrl + '" target="_blank"><img class="infowindow-image" src="' + directImgUrl + '" width="180"/></a>';
 
             self.activeInfoWindow = new google.maps.InfoWindow({
                 content: contentString,
                 maxWidth: 200
             });
-            self.activeInfoWindow.open(map, marker);
+            self.activeInfoWindow.open(self.map, marker);
         });
         return marker;
     }

@@ -15,11 +15,16 @@ class Home extends Component {
 		this.toggleList = this.toggleList.bind(this);
 		this.setNewLocation = this.setNewLocation.bind(this);
         this.setAllLocations = this.setAllLocations.bind(this);
+        this.hideList = this.hideList.bind(this);
 	}
 
 	toggleList() {
 		this.setState({'showList': !this.state.showList});
 	};
+
+	hideList() {
+        this.setState({'showList': false});
+	}
 
 	setNewLocation(location) {
         this.setState({currentLocation: location});
@@ -33,7 +38,7 @@ class Home extends Component {
 		return (
 			<div>
 				<NavBar toggleHandler={this.toggleList} showList={this.state.showList} setNewLocation={this.setNewLocation} setAllLocations={this.setAllLocations}/>
-				<Map currentLocation={this.state.currentLocation} locations={this.state.locations} showList={this.state.showList}/>
+				<Map currentLocation={this.state.currentLocation} hideList={this.hideList} locations={this.state.locations} showList={this.state.showList}/>
 			</div>
 		);
 	}
