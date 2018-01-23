@@ -81,7 +81,9 @@ class Map extends Component {
         });
 
         socket.on('newTweet', function(tweet) {
-            self.processNewTweet(tweet);
+            if (tweet.city === this.selectedMapLocation) {
+                self.processNewTweet(tweet);
+            }
         });
 	}
 
