@@ -7,8 +7,7 @@
   "author": "justinsrd <jsrdeluna@gmail.com>",
   "license": "ISC",
   "scripts": {
-    "start": "webpack-dev-server --port 4444",
-    "compile": "webpack"
+    "start": "webpack && node app/app"
   },
   "dependencies": {
     "axios": "^0.16.2",
@@ -40,6 +39,6 @@
     "sass-loader": "^6.0.5",
     "style-loader": "^0.18.2",
     "webpack": "^2.6.1",
-    "webpack-dev-server": "^2.4.5"
+    "webpack-dev-server": "^2.11.1"
   }
 }
