@@ -1,0 +1,1 @@
+web: yarn compile && node app/app.js
