@@ -21,7 +21,7 @@ class IndulgeUtils {
 
     doesNotContainBannedWords(tweet) {
         const bannedSubstrings = ['#hire', '#hiring', '#job', '#jobs'];
-        for (var i = 0; i < bannedSubstrings.length; i++) {
+        for (let i = 0; i < bannedSubstrings.length; i++) {
             if (tweet.text.toLowerCase().indexOf(bannedSubstrings[i]) > -1) {
                 return false;
             }
