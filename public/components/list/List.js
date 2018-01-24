@@ -10,9 +10,18 @@ class List extends Component {
 	formatTimeString(tweet) {
         const d = new Date(parseInt(tweet.date));
         const dateString = this.months[d.getMonth()] + d.getDate() + ', ' + d.getFullYear();
-        const timeString = Math.abs(d.getHours() - 12) + ':' + (d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes())  + (d.getHours() < 12 ? 'am' : 'pm');
+        const timeString = this.formatHours(d) + ':' + this.formatMinutes(d);
         return dateString + ' ' + timeString;
 	}
+
+    formatHours(date) {
+        return (date.getHours() + 24) % 12 || 12;
+    }
+
+    formatMinutes(date) {
+        let minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+        return (date.getHours() < 12 ? (minutes += 'am') : (minutes += 'pm'));
+    }
 
 	render() {
         const self = this;
