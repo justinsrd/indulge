@@ -23,9 +23,9 @@ const client = new Twitter({
     access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
 
-console.log('dirname:', __dirname);
+const buildLocation = __dirname.substr(0, __dirname.lastIndexOf('/app')) + '/dist';
+app.use(express.static(buildLocation));
 
-app.use(express.static(__dirname.replace('/app', '/dist')));
 app.set('port', (process.env.PORT || 4444));
 
 app.get('/locations', function(req, res) {
