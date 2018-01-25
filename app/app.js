@@ -23,6 +23,8 @@ const client = new Twitter({
     access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
 
+console.log('dirname:', __dirname);
+
 app.use(express.static(__dirname.replace('/app', '/dist')));
 app.set('port', (process.env.PORT || 4444));
 

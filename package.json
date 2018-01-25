@@ -7,8 +7,9 @@
   "author": "justinsrd <jsrdeluna@gmail.com>",
   "license": "ISC",
   "scripts": {
-    "start": "webpack && node app/app",
-    "compile": "webpack"
+    "start": "node app/app",
+    "compile": "webpack",
+    "postinstall": "webpack"
   },
   "dependencies": {
     "axios": "^0.16.2",
