@@ -1,1 +1,1 @@
-web: yarn compile && node app/app.js
+web: node app/app.js
