@@ -79,3 +79,13 @@
 .gm-style-cc {
   display: none !important;
 }
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  .list-container {
+    width: 100vw !important;
+  }
+  .list-hidden {
+    left: -100vw !important;
+  }
+}

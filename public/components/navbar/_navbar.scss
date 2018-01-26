@@ -151,3 +151,14 @@ header {
     }
   }
 }
+
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  .logo-info {
+    display: none !important;
+  }
+  select.dropdown {
+    margin-right: 0 !important;
+  }
+}
