@@ -35,7 +35,7 @@ client.stream('statuses/filter', {locations: Utils.getLocationString(locations)}
 
     MongoClient.connect(DB_URI, function(err, client) {
         if (err) {
-            console.log('Error connecting to database', err);
+            console.log('Error connecting to database ' + new Date() , err);
         }
         console.log('Successfully connected to database...');
         const db = client.db(DB_NAME);
@@ -94,7 +94,7 @@ client.stream('statuses/filter', {locations: Utils.getLocationString(locations)}
     });
 
     stream.on('error', function(error) {
-        console.log('Error streaming data from twitter');
+        console.log('Error streaming data from twitter', new Date());
         throw error;
     });
 });
