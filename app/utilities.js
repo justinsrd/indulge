@@ -2,7 +2,6 @@ class IndulgeUtils {
     constructor() {
 
     }
-
     //bottom left to top right
     //{locations: '-122.41, 47.54, -122.24, 47.70'} seattle
     //'-121.97, 37.66,-121.70, 37.82' dublin
